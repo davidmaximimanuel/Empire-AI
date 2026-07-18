@@ -1,5 +1,6 @@
 "use client";
 import { useLogto } from "@logto/react";
+import ThemeToggle from "../ThemeToggle";
 
 export default function About() {
   const { signIn } = useLogto();
@@ -21,6 +22,7 @@ export default function About() {
         <nav>
           <a href="/about">About</a>
           <a href="#developer">Developer</a>
+          <ThemeToggle />
           <button onClick={handleSignIn}>Sign in</button>
           <a href="https://t.me/askaimbot" className="btn">Get started free</a>
         </nav>

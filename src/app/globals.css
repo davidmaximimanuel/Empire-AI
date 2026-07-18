@@ -4,7 +4,23 @@
   --muted: #7A6A50;
   --border: #2A1F10;
   --primary: #0000FF; /* Change to #0000FF if you prefer the pure blue */
+  --grid-line: rgba(0, 0, 0, 0.07);
+  --demo-bg: #1A1108;
+  --demo-msg-bg: #0E0A06;
 }
+
+[data-theme="dark"] {
+  --bg: #05070d;
+  --text: #6C8CFF;
+  --muted: #9aa0ab;
+  --border: #232733;
+  --primary: #6C8CFF;
+  --grid-line: rgba(255, 255, 255, 0.07);
+  --demo-bg: #10131b;
+  --demo-msg-bg: #0a0c12;
+}
+
+* { box-sizing: border-box; }
 
 body {
   background: var(--bg);
@@ -12,43 +28,73 @@ body {
   font-family: Georgia, 'Times New Roman', serif;
   margin: 0;
   line-height: 1.6;
+  position: relative;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Background grid — fixed so it stays put while the page scrolls */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  transition: background-image 0.4s ease;
 }
 
 a { color: var(--primary); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 /* Header & Nav */
-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 100; }
+header { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 100; flex-wrap: wrap; gap: 12px; transition: background-color 0.4s ease, border-color 0.4s ease; }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none !important; }
 .brand img { height: 32px; width: auto; object-fit: contain; }
-nav { display: flex; gap: 32px; align-items: center; font-family: Arial, sans-serif; font-size: 14px; }
+nav { display: flex; gap: 32px; align-items: center; font-family: Arial, sans-serif; font-size: 14px; flex-wrap: wrap; }
 nav a, nav button { color: var(--muted); text-decoration: none; cursor: pointer; background: none; border: none; font-size: 14px; font-family: Arial, sans-serif; }
 nav a:hover, nav button:hover { color: var(--primary); text-decoration: none; }
 
+/* Theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border) !important;
+  padding: 0 !important;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+}
+.theme-toggle:hover { background: var(--bg); color: var(--primary); transform: rotate(12deg); }
+
 /* Buttons */
-.btn { background: var(--primary); color: #fff; padding: 10px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; font-family: Arial, sans-serif; font-size: 14px; display: inline-block; border: none; cursor: pointer; }
+.btn { background: var(--primary); color: #fff; padding: 10px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; font-family: Arial, sans-serif; font-size: 14px; display: inline-block; border: none; cursor: pointer; transition: opacity 0.2s ease, background-color 0.4s ease; }
 .btn:hover { opacity: 0.9; text-decoration: none; }
 
 /* Layouts */
 .hero { text-align: center; padding: 100px 20px 60px; max-width: 800px; margin: 0 auto; }
-.hero h1 { font-size: clamp(36px, 6vw, 56px); line-height: 1.1; margin-bottom: 24px; color: var(--primary); }
+.hero h1 { font-size: clamp(32px, 6vw, 56px); line-height: 1.15; margin-bottom: 24px; color: var(--primary); }
 .hero p { font-family: Arial, sans-serif; font-size: 18px; color: var(--muted); max-width: 600px; margin: 0 auto 40px; }
 .telegram-note { display: block; margin-top: 12px; font-family: Arial, sans-serif; font-size: 13px; color: var(--muted); }
 
-.demo-box { background: #1A1108; border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 700px; margin: 0 auto 80px; text-align: left; font-family: Arial, sans-serif; }
+.demo-box { background: var(--demo-bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; max-width: 700px; margin: 0 auto 80px; text-align: left; font-family: Arial, sans-serif; transition: background-color 0.4s ease, border-color 0.4s ease; }
 .demo-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--muted); font-size: 13px; }
-.demo-msg { background: #0E0A06; padding: 16px; border-radius: 8px; margin-bottom: 12px; border-left: 3px solid var(--primary); }
+.demo-msg { background: var(--demo-msg-bg); padding: 16px; border-radius: 8px; margin-bottom: 12px; border-left: 3px solid var(--primary); transition: background-color 0.4s ease; }
 
-.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; padding: 60px 40px; max-width: 1200px; margin: 0 auto; }
-.feature { background: #1A1108; border: 1px solid var(--border); border-radius: 12px; padding: 32px; }
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; padding: 60px 40px; max-width: 1200px; margin: 0 auto; }
+.feature { background: var(--demo-bg); border: 1px solid var(--border); border-radius: 12px; padding: 32px; transition: background-color 0.4s ease, border-color 0.4s ease; }
 .feature h3 { margin-top: 0; color: var(--primary); font-size: 20px; }
 .feature p { color: var(--muted); font-family: Arial, sans-serif; font-size: 15px; }
 
-.cta-section { text-align: center; padding: 80px 20px; border-top: 1px solid var(--border); }
+.cta-section { text-align: center; padding: 80px 20px; border-top: 1px solid var(--border); transition: border-color 0.4s ease; }
 .cta-section h2 { font-size: 32px; margin-bottom: 16px; color: var(--primary); }
 .cta-section p { color: var(--muted); font-family: Arial, sans-serif; margin-bottom: 32px; }
 
-footer { border-top: 1px solid var(--border); padding: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; font-family: Arial, sans-serif; font-size: 13px; color: var(--muted); }
+footer { border-top: 1px solid var(--border); padding: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; font-family: Arial, sans-serif; font-size: 13px; color: var(--muted); transition: border-color 0.4s ease; }
 .footer-links { display: flex; gap: 24px; }
 .footer-links a { color: var(--muted); text-decoration: none; }
 .footer-links a:hover { color: var(--primary); }
@@ -59,8 +105,59 @@ footer { border-top: 1px solid var(--border); padding: 40px; display: flex; just
 .container h2 { font-size: 28px; color: var(--primary); margin-top: 48px; margin-bottom: 16px; }
 .container p { font-family: Arial, sans-serif; font-size: 16px; color: var(--muted); margin-bottom: 24px; }
 
-.timeline { border-left: 2px solid var(--border); padding-left: 32px; margin: 40px 0; }
+.timeline { border-left: 2px solid var(--border); padding-left: 32px; margin: 40px 0; transition: border-color 0.4s ease; }
 .timeline-item { margin-bottom: 32px; position: relative; }
-.timeline-item::before { content: ''; position: absolute; left: -39px; top: 6px; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; }
+.timeline-item::before { content: ''; position: absolute; left: -39px; top: 6px; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; transition: background-color 0.4s ease; }
 .timeline-date { font-family: Arial, sans-serif; font-size: 13px; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
 .timeline-title { font-size: 20px; margin: 0 0 8px 0; color: var(--text); }
+
+/* ── Dark-mode toggle transition — a circle wipes out from the button
+   you clicked, revealing the new theme. Falls back to a plain color
+   fade (via the `transition:` rules above) in browsers that don't
+   support the View Transition API yet. ── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .features { padding: 48px 24px; gap: 24px; }
+}
+
+@media (max-width: 768px) {
+  header { padding: 16px 20px; }
+  nav { gap: 14px; font-size: 13px; }
+  .brand img { height: 26px; }
+
+  .hero { padding: 70px 20px 44px; }
+  .hero p { font-size: 16px; margin-bottom: 28px; }
+
+  .demo-box { padding: 18px; margin-bottom: 56px; }
+  .demo-msg { padding: 12px; }
+
+  .features { grid-template-columns: 1fr; padding: 40px 20px; }
+
+  .cta-section { padding: 56px 20px; }
+  .cta-section h2 { font-size: 26px; }
+
+  footer { padding: 28px 20px; justify-content: center; text-align: center; }
+  .footer-links { justify-content: center; gap: 16px; }
+
+  .container { padding: 56px 18px; }
+  .container h1 { font-size: 32px; }
+  .container h2 { font-size: 22px; }
+  .timeline { padding-left: 24px; }
+  .timeline-item::before { left: -31px; }
+}
+
+@media (max-width: 460px) {
+  nav { font-size: 12px; gap: 10px; }
+  nav a:not(.btn) { display: none; } /* keep sign-in / CTA / toggle, hide secondary text links */
+  .btn { padding: 8px 14px; font-size: 13px; }
+  .hero h1 { font-size: 28px; }
+  .hero p { font-size: 15px; }
+}
