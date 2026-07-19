@@ -1,9 +1,10 @@
 "use client";
 import { useLogto } from "@logto/react";
+import { useEffect } from "react";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Home() {
-  const { signIn } = useLogto();
+  const { signIn, signOut, isAuthenticated } = useLogto();
 
   const handleSignIn = async () => {
     try {
@@ -12,6 +13,26 @@ export default function Home() {
       console.error("Sign in failed:", error);
     }
   };
+
+  const handleSignOut = () => {
+    signOut(window.location.origin);
+  };
+
+  // Auto-check for an existing cross-app session (e.g. already signed in
+  // via empireunion.xyz) once per browser session. If a session exists,
+  // Logto completes it silently during this redirect — no login form
+  // shown. If not, the visitor lands on Logto's real sign-in page; the
+  // callback page detects this was a silent check and quietly sends them
+  // back home instead of showing an error.
+  useEffect(() => {
+    if (isAuthenticated) return;
+    if (sessionStorage.getItem("empireai_auto_signin_done") === "1") return;
+
+    sessionStorage.setItem("empireai_auto_signin_done", "1");
+    sessionStorage.setItem("empireai_auto_signin", "1");
+    signIn(`${window.location.origin}/callback`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -23,7 +44,11 @@ export default function Home() {
           <a href="/about">About</a>
           <a href="#developer">Developer</a>
           <ThemeToggle />
-          <button onClick={handleSignIn}>Sign in</button>
+          {isAuthenticated ? (
+            <button onClick={handleSignOut}>Sign out</button>
+          ) : (
+            <button onClick={handleSignIn}>Sign in</button>
+          )}
           <a href="https://t.me/askaimbot" className="btn">Get started free</a>
         </nav>
       </header>
