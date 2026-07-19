@@ -1,9 +1,10 @@
 "use client";
 import { useLogto } from "@logto/react";
+import { useEffect } from "react";
 import ThemeToggle from "../ThemeToggle";
 
 export default function About() {
-  const { signIn } = useLogto();
+  const { signIn, signOut, isAuthenticated } = useLogto();
 
   const handleSignIn = async () => {
     try {
@@ -12,6 +13,23 @@ export default function About() {
       console.error("Sign in failed:", error);
     }
   };
+
+  const handleSignOut = () => {
+    signOut(window.location.origin);
+  };
+
+  // Same session-gated auto-check as the homepage — covers visitors who
+  // land directly on /about first (e.g. from a search result or shared
+  // link) rather than the homepage.
+  useEffect(() => {
+    if (isAuthenticated) return;
+    if (sessionStorage.getItem("empireai_auto_signin_done") === "1") return;
+
+    sessionStorage.setItem("empireai_auto_signin_done", "1");
+    sessionStorage.setItem("empireai_auto_signin", "1");
+    signIn(`${window.location.origin}/callback`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -23,7 +41,11 @@ export default function About() {
           <a href="/about">About</a>
           <a href="#developer">Developer</a>
           <ThemeToggle />
-          <button onClick={handleSignIn}>Sign in</button>
+          {isAuthenticated ? (
+            <button onClick={handleSignOut}>Sign out</button>
+          ) : (
+            <button onClick={handleSignIn}>Sign in</button>
+          )}
           <a href="https://t.me/askaimbot" className="btn">Get started free</a>
         </nav>
       </header>
