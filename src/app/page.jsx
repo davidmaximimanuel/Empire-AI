@@ -72,7 +72,7 @@ export default function Home() {
         </a>
         <nav>
           <a href="/about">About</a>
-          <a href="#developer">Developer</a>
+          <a href="/developer">Developer</a>
           <ThemeToggle />
           {isAuthenticated ? (
             <>

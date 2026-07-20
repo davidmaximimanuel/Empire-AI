@@ -47,7 +47,7 @@ export default function About() {
         </a>
         <nav>
           <a href="/about">About</a>
-          <a href="#developer">Developer</a>
+          <a href="/developer">Developer</a>
           <ThemeToggle />
           {isAuthenticated ? (
             <>
@@ -108,7 +108,7 @@ export default function About() {
         <div>© 2026 Empire AI. All rights reserved.</div>
         <div className="footer-links">
           <a href="/about">About</a>
-          <a href="#developer">Developer</a>
+          <a href="/developer">Developer</a>
           <a href="https://empireunion.xyz/privacy">Privacy</a>
           <a href="https://empireunion.xyz/terms">Terms</a>
         </div>
