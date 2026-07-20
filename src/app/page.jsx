@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Home() {
-  const { signIn, signOut, isAuthenticated } = useLogto();
+  const { signIn, signOut, isAuthenticated, getAccessToken } = useLogto();
 
   const handleSignIn = async () => {
     try {
@@ -23,6 +23,28 @@ export default function Home() {
       window.open("https://id.empireunion.xyz/account/security", "_blank", "noopener,noreferrer");
     } else {
       handleSignIn();
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!window.confirm("Delete your Empire ID and all your data? This can't be undone.")) return;
+    try {
+      const token = await getAccessToken();
+      if (!token) {
+        alert("Could not verify your session. Try signing out and back in, then retry.");
+        return;
+      }
+      const res = await fetch('/api/delete-account', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      alert(data.message);
+      signOut(window.location.origin);
+    } catch (err) {
+      console.error('Delete account error:', err);
+      alert('Something went wrong deleting your account. Please try again.');
     }
   };
 
@@ -56,6 +78,7 @@ export default function Home() {
             <>
               <button onClick={handleIdClick}>My ID</button>
               <button onClick={handleSignOut}>Sign out</button>
+              <button onClick={handleDeleteAccount} style={{ color: '#e05c5c' }}>Delete account</button>
             </>
           ) : (
             <button onClick={handleSignIn}>Sign in</button>
