@@ -33,8 +33,32 @@ export default function Developer() {
 
       <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px" }}>
         <div className="features" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))" }}>
-          {/* eConnect Card */}
-          <div className="feature" style={{ background: "#1A1108", border: "1px solid var(--border)", borderRadius: "12px", padding: "32px", height: "100%" }}>
+          {/* eConnect Card - CLICKABLE */}
+          <a 
+            href="https://econnect.empireunion.xyz" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ 
+              background: "#1A1108", 
+              border: "1px solid var(--border)", 
+              borderRadius: "12px", 
+              padding: "32px", 
+              height: "100%",
+              textDecoration: "none",
+              color: "inherit",
+              display: "block",
+              transition: "transform 0.2s, box-shadow 0.2s",
+              cursor: "pointer"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-4px)";
+              e.currentTarget.style.boxShadow = "0 8px 24px rgba(37, 150, 190, 0.15)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          >
             <h3 style={{ margin: "0 0 16px 0", color: "#2596be", fontSize: "24px" }}>eConnect</h3>
             <p style={{ color: "var(--muted)", fontSize: "16px", marginBottom: "24px" }}>
               <strong style={{ color: "var(--text)" }}>The Elevator Pitch</strong>
@@ -107,9 +131,19 @@ export default function Developer() {
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* AIM API Card */}
+            <div style={{
+              marginTop: "20px",
+              textAlign: "center",
+              color: "#2596be",
+              fontSize: "14px",
+              fontWeight: "600"
+            }}>
+              Visit eConnect →
+            </div>
+          </a>
+
+          {/* AIM API Card - NOT CLICKABLE (Greyed out) */}
           <div className="feature" style={{ 
             background: "#1A1108", 
             border: "1px solid var(--border)", 
