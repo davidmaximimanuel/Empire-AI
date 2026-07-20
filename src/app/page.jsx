@@ -18,6 +18,14 @@ export default function Home() {
     signOut(window.location.origin);
   };
 
+  const handleIdClick = () => {
+    if (isAuthenticated) {
+      window.open("https://id.empireunion.xyz/account/security", "_blank", "noopener,noreferrer");
+    } else {
+      handleSignIn();
+    }
+  };
+
   // Auto-check for an existing cross-app session (e.g. already signed in
   // via empireunion.xyz) once per browser session. If a session exists,
   // Logto completes it silently during this redirect — no login form
@@ -45,7 +53,10 @@ export default function Home() {
           <a href="#developer">Developer</a>
           <ThemeToggle />
           {isAuthenticated ? (
-            <button onClick={handleSignOut}>Sign out</button>
+            <>
+              <button onClick={handleIdClick}>My ID</button>
+              <button onClick={handleSignOut}>Sign out</button>
+            </>
           ) : (
             <button onClick={handleSignIn}>Sign in</button>
           )}

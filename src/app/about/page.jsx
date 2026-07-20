@@ -18,6 +18,14 @@ export default function About() {
     signOut(window.location.origin);
   };
 
+  const handleIdClick = () => {
+    if (isAuthenticated) {
+      window.open("https://id.empireunion.xyz/account/security", "_blank", "noopener,noreferrer");
+    } else {
+      handleSignIn();
+    }
+  };
+
   // Same session-gated auto-check as the homepage — covers visitors who
   // land directly on /about first (e.g. from a search result or shared
   // link) rather than the homepage.
@@ -42,7 +50,10 @@ export default function About() {
           <a href="#developer">Developer</a>
           <ThemeToggle />
           {isAuthenticated ? (
-            <button onClick={handleSignOut}>Sign out</button>
+            <>
+              <button onClick={handleIdClick}>My ID</button>
+              <button onClick={handleSignOut}>Sign out</button>
+            </>
           ) : (
             <button onClick={handleSignIn}>Sign in</button>
           )}
